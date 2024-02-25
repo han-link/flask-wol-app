@@ -1,18 +1,8 @@
 {% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
 
-{%block content%}
-
-	<h1>Index</h1>
-	<div class="row">
-		<div class="col-md-4">
-			<img src="http://placehold.it/360x200" class="img-polaroid">
-		</div>
-		<div class="col-md-4">
-			<img src="http://placehold.it/360x200" class="img-polaroid">
-		</div>
-		<div class="col-md-4">
-			<img src="http://placehold.it/360x200" class="img-polaroid">
-		</div>
-	</div>
-
-{%endblock%}
+{% block content %}
+    <div class="w-25">
+        {{ render_form(wake_up_form, button_style='success') }}
+    </div>
+{% endblock %}
