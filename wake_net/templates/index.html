@@ -2,6 +2,7 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
+    <a class="btn btn-primary" href="{{ url_for('main.add_device') }}" role="button">Link</a>
     <div class="w-25">
         {{ render_form(wake_up_form, button_style='success') }}
     </div>

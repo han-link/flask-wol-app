@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+    <div class="w-25">
+        {{ render_form(add_device_form, button_style='success') }}
+    </div>
+{% endblock %}
