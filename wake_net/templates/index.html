@@ -3,5 +3,5 @@
 
 {% block content %}
     <a class="btn btn-primary" href="{{ url_for('main.add_device') }}" role="button">Link</a>
-    {{ render_table(records) }}
+    {{ render_table(records, model=Device, show_actions=True, delete_url=('main.delete_device', [('device_id', ':id')])) }}
 {% endblock %}
