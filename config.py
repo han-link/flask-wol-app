@@ -12,6 +12,7 @@ class Config(object):
     SECRET_KEY = os.getenv('SECRET_KEY')
     CSRF_ENABLED = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    BOOTSTRAP_BOOTSWATCH_THEME = 'lux'
 
 
 class ProductionConfig(Config):
