@@ -1,4 +1,4 @@
-from . import db
+from wake_net.main import db
 
 
 class Device(db.Model):
@@ -8,8 +8,5 @@ class Device(db.Model):
     ip = db.Column(db.String(15), nullable=False)
     netmask = db.Column(db.String(15), nullable=False)
 
-    def __init__(self, name, mac, ip, netmask):
-        self.name = name
-        self.mac = mac
-        self.ip = ip
-        self.netmask = netmask
+    def __repr__(self):
+        return '<Device %r>' % self.name

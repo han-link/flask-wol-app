@@ -11,6 +11,6 @@ class WakeUpForm(Form):
 class AddDeviceForm(Form):
     name = StringField('Name', validators=[DataRequired()])
     mac = StringField('Mac Address', validators=[DataRequired(), Length(min=12, max=17)])
-    ip = StringField('IP Address', validators=[DataRequired(), Length(min=15, max=15)])
-    netmask = StringField('Netmask', validators=[DataRequired(), Length(min=15, max=15)])
+    ip = StringField('IP Address', validators=[DataRequired(), Length(min=7, max=15)])
+    netmask = StringField('Netmask', validators=[DataRequired(), Length(min=7, max=15)])
     submit = SubmitField()
