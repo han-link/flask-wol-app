@@ -1,6 +1,6 @@
 # views.py
-from flask import Blueprint, render_template, redirect, url_for
-from wake_net.forms import WakeUpForm, AddDeviceForm
+from flask import Blueprint, render_template, redirect, url_for, flash
+from wake_net.forms import EditDeviceForm, AddDeviceForm
 from wakeonlan import send_magic_packet
 from wake_net.models import Device
 from wake_net.main import db
@@ -14,7 +14,7 @@ def index():
     return render_template('index.html', Device=Device, records=records)
 
 
-@main.route('/deleteDevice/<int:device_id>', methods=['POST'])
+@main.route('/device/delete/<int:device_id>', methods=['POST'])
 def delete_device(device_id):
     device = Device.query.get_or_404(device_id)
     db.session.delete(device)
@@ -22,7 +22,7 @@ def delete_device(device_id):
     return redirect(url_for('main.index'))
 
 
-@main.route('/addDevice', methods=['GET', 'POST'])
+@main.route('/device/add', methods=['GET', 'POST'])
 def add_device():
     add_device_form = AddDeviceForm()
     if add_device_form.validate_on_submit():
@@ -49,3 +49,39 @@ def add_device():
             return redirect(url_for('main.index'))
 
     return render_template('addDevice.html', add_device_form=add_device_form)
+
+@main.route('/device/edit/<int:device_id>', methods=['GET', 'POST'])
+def edit_device(device_id):
+    device = Device.query.get_or_404(device_id)
+    edit_device_form = EditDeviceForm(obj=device)
+
+    if edit_device_form.validate_on_submit():
+        mac_exists = Device.query.filter(Device.id != device_id, Device.mac == edit_device_form.mac.data).first()
+        ip_exists = Device.query.filter(Device.id != device_id, Device.ip == edit_device_form.ip.data).first()
+
+        error = False
+        if mac_exists:
+            edit_device_form.mac.errors.append('A device with this MAC address already exists.')
+            error = True
+        if ip_exists:
+            edit_device_form.ip.errors.append('A device with this IP address already exists.')
+            error = True
+
+        if not error:
+            device.name = edit_device_form.name.data
+            device.mac = edit_device_form.mac.data
+            device.ip = edit_device_form.ip.data
+            device.netmask = edit_device_form.netmask.data
+            db.session.commit()
+            flash('Device updated successfully!', 'success')
+            return redirect(url_for('main.index'))
+
+    return render_template('editDevice.html', form=edit_device_form)
+
+@main.route('/device/wake/<int:device_id>', methods=('GET', 'POST'))
+def wake_device(device_id):
+    device = Device.query.get_or_404(device_id)
+    if device:
+        send_magic_packet(device.mac)
+        flash('Device waked successfully!', 'success')
+        return redirect(url_for('main.index'))
