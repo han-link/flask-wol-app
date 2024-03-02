@@ -11,8 +11,6 @@ def send_magic_packet(mac_address):
 
     # Create the payload 0xFF * 6 FF:FF: FF: FF: FF:FF + Mac address * 16
     payload = b"\xFF" * 6 + mac_byte * 16
-    hex_string = ' '.join(f'{byte:02x}' for byte in payload)
-    print(hex_string)
 
     # Send magic packet
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:

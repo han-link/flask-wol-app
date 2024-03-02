@@ -13,6 +13,7 @@ class Config(object):
     CSRF_ENABLED = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     BOOTSTRAP_BOOTSWATCH_THEME = 'lux'
+    BOOTSTRAP_SERVE_LOCAL = True
 
 
 class ProductionConfig(Config):

@@ -7,8 +7,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+        {{ bootstrap.load_css() }}
         {% block styles %}
-            {{ bootstrap.load_css() }}
         {% endblock %}
 
         <title>WakeNet</title>
@@ -23,8 +23,8 @@
     {% block content %}{% endblock %}
 </main>
 
+{{ bootstrap.load_js() }}
 {% block scripts %}
-    {{ bootstrap.load_js() }}
 {% endblock %}
 </body>
 </html>

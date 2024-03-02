@@ -1,15 +1,72 @@
 {% extends "base.html" %}
-{% from 'bootstrap5/table.html' import render_table %}
+{% from 'bootstrap5/utils.html' import render_icon %}
 
 {% block content %}
-    {{ render_table(records,
-                    titles=[('name', 'Name'), ('mac', 'MAC Address'), ('ip', 'IP Address'), ('netmask', 'Netmask')],
-                    model=Device,
-                    show_actions=True,
-                    edit_url=('main.edit_device', [('device_id', ':id')]),
-                    delete_url=('main.delete_device', [('device_id', ':id')]),
-                    custom_actions=[('Wake Device', 'play-fill', ('main.wake_device', [('device_id', ':id')]))],
-                    new_url=('main.add_device'),
-                    responsive=True
-    )}}
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for device in records %}
+                <div type="button" class="col" data-bs-toggle="modal" data-bs-target="#deviceModal"
+                     data-id="{{ device.id }}"
+                     data-name="{{ device.name }}" data-mac="{{ device.mac }}" data-ip="{{ device.ip }}"
+                     data-netmask="{{ device.netmask }}">
+                    <div class="bg-light shadow p-3 d-flex justify-content-between align-items-center">
+                        <h5>{{ device.name }}</h5>
+                        <button type="button" class="btn btn-danger view-details">
+                            {{ render_icon('play', 20) }}
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="deviceModal" tabindex="-1" aria-labelledby="deviceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deviceModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="deviceMac"></p>
+                    <p id="deviceIp"></p>
+                    <p id="deviceNetmask"></p>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-primary" id="btnEdit" href="">Edit</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const exampleModal = document.getElementById('deviceModal');
+            exampleModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                const name = button.getAttribute('data-name');
+                const mac = button.getAttribute('data-mac');
+                const ip = button.getAttribute('data-ip');
+                const netmask = button.getAttribute('data-netmask');
+
+                const modalEditBtn = exampleModal.querySelector('#btnEdit');
+                const modalTitle = exampleModal.querySelector('.modal-title');
+                const modalMac = exampleModal.querySelector('#deviceMac');
+                const modalIp = exampleModal.querySelector('#deviceIp');
+                const modalNetmask = exampleModal.querySelector('#deviceNetmask');
+
+                modalEditBtn.href = '/device/edit/' + id
+                modalTitle.textContent = name;
+                modalMac.textContent = 'MAC: ' + mac;
+                modalIp.textContent = 'IP: ' + ip;
+                modalNetmask.textContent = 'Netmask: ' + netmask;
+            });
+        });
+    </script>
+
+{% endblock %}
+

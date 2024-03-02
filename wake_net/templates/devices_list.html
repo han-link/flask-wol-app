@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/table.html' import render_table %}
+
+{% block content %}
+    {{ render_table(records,
+                    titles=[('name', 'Name'), ('mac', 'MAC Address'), ('ip', 'IP Address'), ('netmask', 'Netmask')],
+                    model=Device,
+                    show_actions=True,
+                    edit_url=('main.edit_device', [('device_id', ':id')]),
+                    delete_url=('main.delete_device', [('device_id', ':id')]),
+                    custom_actions=[('Wake Device', 'play-fill', ('main.wake_device', [('device_id', ':id')]))],
+                    new_url=('main.add_device'),
+                    responsive=True
+    )}}
+{% endblock %}

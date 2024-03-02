@@ -1,17 +1,23 @@
 # views.py
 from flask import Blueprint, render_template, redirect, url_for, flash
 from wake_net.forms import EditDeviceForm, AddDeviceForm
-from wakeonlan import send_magic_packet
+from wake_net.wakeonlan import send_magic_packet
 from wake_net.models import Device
 from wake_net.main import db
 
 main = Blueprint('main', __name__)
 
 
-@main.route('/')
+@main.route("/")
 def index():
     records = Device.query.all()
-    return render_template('index.html', Device=Device, records=records)
+    return render_template("index.html", records=records)
+
+
+@main.route('/devices/list')
+def devices_list():
+    records = Device.query.all()
+    return render_template('devices_list.html', Device=Device, records=records)
 
 
 @main.route('/device/delete/<int:device_id>', methods=['POST'])
@@ -50,6 +56,7 @@ def add_device():
 
     return render_template('addDevice.html', add_device_form=add_device_form)
 
+
 @main.route('/device/edit/<int:device_id>', methods=['GET', 'POST'])
 def edit_device(device_id):
     device = Device.query.get_or_404(device_id)
@@ -77,6 +84,7 @@ def edit_device(device_id):
             return redirect(url_for('main.index'))
 
     return render_template('editDevice.html', form=edit_device_form)
+
 
 @main.route('/device/wake/<int:device_id>', methods=('GET', 'POST'))
 def wake_device(device_id):
