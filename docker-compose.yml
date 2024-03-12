@@ -1,0 +1,7 @@
+version: "3"
+services:
+  wakenet:
+    container_name: "WakeNet-Test"
+    image: wakenet-test:v1
+    network_mode: host
+    restart: unless-stopped
